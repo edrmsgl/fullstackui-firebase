@@ -33,14 +33,6 @@ export default function MainPage() {
   if (!email) return null
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-400 via-purple-400 via-60% to-pink-400">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg">
-        <h1 className="text-2xl font-bold text-center text-gray-800">Hoşgeldin</h1>
-        <div className="text-center">
-          <p>{email}</p>
-          <button onClick={handleLogout} className="cursor-pointer">Çıkış Yap</button>
-        </div>
-      </div>
-    </div>
+    ':)'
   );
 }
