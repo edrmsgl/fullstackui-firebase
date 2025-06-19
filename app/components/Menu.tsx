@@ -14,20 +14,20 @@ import LocalSeeIcon from '@mui/icons-material/LocalSee';
 import MarkUnreadChatAltOutlinedIcon from '@mui/icons-material/MarkUnreadChatAltOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import LocationPinIcon from '@mui/icons-material/LocationPin';
 
 const MenuItems = [
-  { icon: <HomeIcon />, title: 'Anasayfa', url: '/dashboard/admin' },
+  { icon: <HomeIcon />, title: 'Anasayfa', url: '/dashboard/main' },
+  { icon: <LocationPinIcon />, title: 'Şubeler', url: '/dashboard/branches' },
   { icon: <SchoolIcon />, title: 'Eğitmenler', url: '/dashboard/instructors' },
   { icon: <GroupIcon />, title: 'Öğrenciler', url: '/dashboard/students' },
   { icon: <Diversity3Icon />, title: 'Yaş Grupları', url: '/dashboard/agegroups' },
-  { icon: <SportsIcon />, title: 'Spor Dalları', url: '/dashboard/branches' },
   { icon: <CalendarMonthIcon />, title: 'Sezonlar & Yıllar', url: '/dashboard/seasons' },
   { icon: <AttachMoneyIcon />, title: 'Ödemeler', url: '/dashboard/billings' },
   { icon: <MarkUnreadChatAltOutlinedIcon />, title: 'Sosyal', url: '/dashboard/social' },
   { icon: <LocalSeeIcon />, title: 'Resimler', url: '/dashboard/pictures' },
   { icon: <OndemandVideoIcon />, title: 'Videolar', url: '/dashboard/videoos' },
   { icon: <SettingsOutlinedIcon />, title: 'Ayarlar', url: '/dashboard/settings' },
-  { icon: <LogoutOutlinedIcon />, title: 'Çıkış', url: '/logout' },
 ];
 
 const Menu = () => {

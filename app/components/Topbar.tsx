@@ -52,7 +52,7 @@ const TopBar = () => {
     <div className='flex items-center justify-end lg:justify-between'>
       <div className='hidden search relative rounded-full border border-gray-300 px-3 py-1.5 gap-2.5 lg:flex justify-center items-center'>
         <SearchIcon className='text-gray-400' />
-        <Input placeholder='Search' className='text-xs! min-w-60' />
+        <Input placeholder='Ne aramıştınız?' className='text-xs! min-w-60' />
       </div>
       <div className='userbar flex items-center justify-end gap-8'>
         <div className='flex justify-center items-center rounded-full bg-white w-10 h-10 cursor-pointer'>
