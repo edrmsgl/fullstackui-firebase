@@ -3,6 +3,7 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/app/firebaseConfig";
 import { useRouter } from "next/navigation";
+import { Button, Input } from "@mui/material";
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
@@ -29,14 +30,14 @@ export default function SignInPage() {
       <div className="w-full max-w-md p-8 space-y-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg">
         <h1 className="text-2xl font-bold text-center text-gray-800">Giriş Yap</h1>
 
-        <input
+        <Input
           className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Eposta"
           onChange={(e) => setEmail(e.target.value)}
           onKeyDown={handleKeyDown}
         />
 
-        <input
+        <Input
           type="password"
           className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Şifre"
@@ -44,21 +45,23 @@ export default function SignInPage() {
           onKeyDown={handleKeyDown}
         />
 
-        <button
-          className="w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded hover:bg-blue-700 cursor-pointer"
+        <Button
+        variant="contained"
+        color="primary"
+          className="w-full px-4 py-2 font-semibold cursor-pointer"
           onClick={handleSignIn}
         >
           Giriş Yap
-        </button>
+        </Button>
 
         <p className="text-center text-sm text-gray-700">
           Henüz üye değil misiniz?{" "}
-          <button
+          <Button
             className="text-blue-600 hover:underline cursor-pointer"
             onClick={() => router.push("/signup")}
           >
             Kayıt Ol
-          </button>
+          </Button>
         </p>
 
         <div className="text-center text-sm text-blue-600 hover:underline cursor-pointer" onClick={() => router.push("/forgot-password")}>

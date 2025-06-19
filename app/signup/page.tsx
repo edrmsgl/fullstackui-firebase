@@ -122,14 +122,16 @@ export default function Signup() {
 
         <Button
           onClick={handleSignup}
-          className="w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded hover:bg-blue-700 cursor-pointer"
+          variant="contained"
+          className="button w-full px-4 py-2 cursor-pointer mb-5!"
         >
-          Kayıt Ol
+          KAYIT OL
         </Button>
 
         <p className="text-center text-sm text-gray-700">
           Zaten hesabınız var mı?{" "}
           <Button
+            variant="text"
             className="text-blue-600 hover:underline cursor-pointer"
             onClick={() => router.push("/signin")}
           >

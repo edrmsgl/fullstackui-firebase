@@ -39,3 +39,7 @@ body {
     border-bottom: 0 !important;
   }
 }
+
+button {
+  text-transform: none !important
+}
