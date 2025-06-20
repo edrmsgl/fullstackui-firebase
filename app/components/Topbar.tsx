@@ -64,11 +64,11 @@ const TopBar = () => {
           <Tooltip title="Bildirimler">
             <NotificationsIcon />
           </Tooltip>
-          <div className='absolute -right-2 -top-2 bg-indigo-600 w-6 h-6 text-white flex justify-center items-center rounded-full border-2 border-white text-sm'>5</div>
+          <div className='absolute -right-2 -top-2 bg-btnHover w-6 h-6 text-white flex justify-center items-center rounded-full border-2 border-white text-sm'>5</div>
         </div>
         <div className='userFullName text-right leading-5'>
           <h3 className='font-bold'>{fullName}</h3>
-          <p className='text-sm text-gray-500'>{role === 'instructor' ? 'Eğitmen' : 'Öğrenci'}</p>
+          <p className='text-sm text-gray-500'>{role === 'admin' ? 'Yönetici'  : role === 'instructor' ? 'Eğitmen' : 'Öğrenci'}</p>
         </div>
         <div className='userPicture relative'>
           <Image
