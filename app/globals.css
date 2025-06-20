@@ -43,3 +43,7 @@ body {
 button {
   text-transform: none !important
 }
+
+.MuiOutlinedInput-notchedOutline {
+  text-indent: -99999px !important;
+}

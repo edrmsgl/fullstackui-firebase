@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Drawer, Tooltip, Modal, Box } from '@mui/material';
+import { Alert, Button, Drawer, Tooltip, Modal, Box, Input } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import EditIcon from '@mui/icons-material/Edit';
@@ -16,13 +16,13 @@ interface Branch {
     id?: string;
     name: string;
     address: string;
-    phone: string;
+    phone: string
 }
 
 const Branches = () => {
     const [open, setOpen] = useState<{ [key: string]: boolean }>({ right: false });
     const [branches, setBranches] = useState<Branch[]>([]);
-    const [form, setForm] = useState<Branch>({ name: '', address: '', phone: '' });
+    const [form, setForm] = useState<Branch>({ name: '', address: '', phone: ''});
     const [phoneError, setPhoneError] = useState<string>('');
     const [editingId, setEditingId] = useState<string | null>(null);
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -44,11 +44,13 @@ const Branches = () => {
     const handleClose = (direction: string) => () => {
         setOpen(prev => ({ ...prev, [direction]: false }));
         setPhoneError('');
-        setForm({ name: '', address: '', phone: '' });
+        setForm({ name: '', address: '', phone: ''});
         setEditingId(null);
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
         const { name, value } = e.target;
         if (name === 'phone') {
             const isValid = /^05\d{9}$/.test(value);
@@ -74,7 +76,7 @@ const Branches = () => {
             await addDoc(collection(db, 'branches'), form);
         }
 
-        setForm({ name: '', address: '', phone: '' });
+        setForm({ name: '', address: '', phone: ''});
         setOpen({ right: false });
         setPhoneError('');
         setEditingId(null);
@@ -203,7 +205,7 @@ const Branches = () => {
                         '& .MuiDataGrid-cell': {
                             outline: 'none !important',
                         }
-                    }}  
+                    }}
                 />
             </div>
 
@@ -224,15 +226,15 @@ const Branches = () => {
                         <div className='flex flex-col gap-4 w-full max-w-lg'>
                             <div className='mb-5'>
                                 <label className='text-sm font-semibold block mb-2'>Şube Adı *</label>
-                                <input type="text" name="name" value={form.name} onChange={handleChange} placeholder='Şube Adı' className='w-full h-10 border border-gray-300 rounded-md px-3 outline-0' />
+                                <Input type="text" name="name" value={form.name} onChange={handleChange} placeholder='Şube Adı' className='w-full h-10 border border-gray-300 rounded-md px-3 outline-0' />
                             </div>
                             <div className='mb-5'>
                                 <label className='text-sm font-semibold block mb-2'>Adres *</label>
-                                <input type="text" name="address" value={form.address} onChange={handleChange} placeholder='Adres' className='w-full h-30 border border-gray-300 rounded-md px-3 outline-0' />
+                                <textarea name="address" value={form.address} style={{ overflow: 'auto', resize: 'none', height: '100px' }} onChange={handleChange} placeholder='Adres' className='w-full h-30 border border-gray-300 rounded-md p-2.5 outline-0' />
                             </div>
                             <div className='mb-5'>
                                 <label className='text-sm font-semibold block mb-2'>Telefon *</label>
-                                <input type="text" name="phone" value={form.phone} onChange={handleChange} placeholder='Telefon Numarası' className='w-full h-10 border border-gray-300 rounded-md px-3 outline-0' />
+                                <Input type="text" name="phone" value={form.phone} onChange={handleChange} placeholder='Telefon Numarası' className='w-full h-10 border border-gray-300 rounded-md px-3 outline-0' />
                                 {phoneError && <p className="text-red-600 text-sm mt-1">{phoneError}</p>}
                             </div>
                         </div>
