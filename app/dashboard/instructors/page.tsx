@@ -210,7 +210,7 @@ const Instructors = () => {
             </div>
 
             <Drawer
-                sx={{ '& .MuiDrawer-paper': { width: 600, boxSizing: 'border-box' } }}
+                sx={{ '& .MuiDrawer-paper': { width: 500, boxSizing: 'border-box' } }}
                 anchor={'right'}
                 open={open['right']}
                 onClose={handleClose('right')}

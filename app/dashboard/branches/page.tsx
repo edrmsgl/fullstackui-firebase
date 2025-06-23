@@ -131,7 +131,6 @@ const Branches = () => {
                         </Button>
                     </Tooltip>
 
-
                     <Modal
                         open={openModal}
                         onClose={() => setOpenModal(false)}
@@ -210,7 +209,7 @@ const Branches = () => {
             </div>
 
             <Drawer
-                sx={{ '& .MuiDrawer-paper': { width: 900, boxSizing: 'border-box' } }}
+                sx={{ '& .MuiDrawer-paper': { width: 500, boxSizing: 'border-box' } }}
                 anchor={'right'}
                 open={open['right']}
                 onClose={handleClose('right')}
