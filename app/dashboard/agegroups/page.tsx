@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Button, Drawer, TextField, Alert, Tooltip } from '@mui/material';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { Button, Drawer, TextField, Alert, Tooltip, Input } from '@mui/material';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
 import { db } from '@/app/firebaseConfig';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
@@ -30,7 +30,8 @@ const AgeGroups = () => {
   }, []);
 
   const loadAgeGroups = async () => {
-    const snapshot = await getDocs(collection(db, 'ageGroups'));
+    const q = query(collection(db, 'ageGroups'), orderBy('name'));
+    const snapshot = await getDocs(q);
     const data = snapshot.docs.map(doc => ({ id: doc.id, ...(doc.data() as AgeGroup) }));
     setAgeGroups(data);
   };
@@ -42,13 +43,33 @@ const AgeGroups = () => {
     setEditingId(null);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: name === 'name' ? value : Number(value) }));
+    if (name === 'name' || name === 'description') {
+      setForm(prev => ({ ...prev, [name]: value }));
+    } else {
+      setForm(prev => ({ ...prev, [name]: Number(value) }));
+    }
   };
 
   const handleSubmit = async () => {
-    if (!form.name || form.minAge < 0 || form.maxAge < form.minAge) return;
+    if (!form.name || form.minAge < 0 || form.maxAge < form.minAge || !form.description) return;
+
+    const existingSnapshot = await getDocs(collection(db, 'ageGroups'));
+    const existingNames = existingSnapshot.docs.map(doc => ({
+      id: doc.id,
+      name: doc.data().name.trim().toLowerCase()
+    }));
+
+    const isDuplicate = existingNames.some(group =>
+      group.name === form.name.trim().toLowerCase() &&
+      group.id !== editingId
+    );
+
+    if (isDuplicate) {
+      alert('Bu isimde bir yaş grubu zaten mevcut.');
+      return;
+    }
 
     if (editingId) {
       const ref = doc(db, 'ageGroups', editingId);
@@ -60,6 +81,7 @@ const AgeGroups = () => {
     handleClose();
     loadAgeGroups();
   };
+
 
   const handleEdit = (item: AgeGroup) => {
     setForm(item);
@@ -127,13 +149,23 @@ const AgeGroups = () => {
         </Button>
       </div>
 
-      <div className='mt-10' style={{ height: 400, width: '100%' }}>
+      <div className='mt-10' style={{ width: '100%' }}>
         <DataGrid
           rows={ageGroups.map(group => ({ ...group, id: group.id || '' }))}
           columns={columns}
-          initialState={{ pagination: { paginationModel: { pageSize: 5 } } }}
-          pageSizeOptions={[5]}
+          initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
+          pageSizeOptions={[10]}
           disableRowSelectionOnClick
+          sx={{
+                        '& .MuiDataGrid-columnHeaderTitle': {
+                            outline: 'none !important',
+                            fontWeight: 'bold !important',
+                            fontSize: '14px',
+                        },
+                        '& .MuiDataGrid-cell': {
+                            outline: 'none !important',
+                        }
+                    }}
         />
       </div>
 
@@ -147,12 +179,24 @@ const AgeGroups = () => {
           <h2 className='text-xl font-bold mb-4'>{editingId ? 'Yaş Grubu Güncelle' : 'Yaş Grubu Ekle'}</h2>
           <Alert severity="info" className='mb-5'>* Tüm alanlar zorunludur.</Alert>
           <div className='flex flex-col gap-4'>
-            <TextField label="Grup Adı" name="name" value={form.name} onChange={handleChange} fullWidth />
-            <TextField type="number" label="Minimum Yaş" name="minAge" value={form.minAge} onChange={handleChange} fullWidth />
-            <TextField type="number" label="Maksimum Yaş" name="maxAge" value={form.maxAge} onChange={handleChange} fullWidth />
-            <TextField type="string" label="Açıklama" name="description" value={form.description} onChange={handleChange} fullWidth />
-          </div>
 
+            <div className='mb-5'>
+              <label className='text-sm font-semibold block mb-2'>Adı *</label>
+              <Input name="name" value={form.name} onChange={handleChange} placeholder='Adı' className='w-full h-10 border border-gray-300 rounded-md px-3 outline-0' />
+            </div>
+            <div className='mb-5'>
+              <label className='text-sm font-semibold block mb-2'>Minimum Yaş *</label>
+              <Input type="number" name="minAge" value={form.minAge} onChange={handleChange} placeholder='Minimum Yaş' className='w-full h-10 border border-gray-300 rounded-md px-3 outline-0' />
+            </div>
+            <div className='mb-5'>
+              <label className='text-sm font-semibold block mb-2'>Maximum Yaş *</label>
+              <Input type="number" name="maxAge" value={form.maxAge} onChange={handleChange} placeholder='Maximum Yaş' className='w-full h-10 border border-gray-300 rounded-md px-3 outline-0' />
+            </div>
+            <div className='mb-5'>
+              <label className='text-sm font-semibold block mb-2'>Açıklama</label>
+              <textarea name="description" value={form.description} onChange={handleChange} placeholder='Açıklama' className='w-full h-30 border border-gray-300 rounded-md p-2.5 outline-0' />
+            </div>
+          </div>
           <div className='flex justify-end gap-4 mt-6'>
             <Button startIcon={<CloseIcon />} variant='outlined' onClick={handleClose}>Kapat</Button>
             <Button

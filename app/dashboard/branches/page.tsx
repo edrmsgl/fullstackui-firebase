@@ -8,7 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
 import { db } from '@/app/firebaseConfig';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
@@ -16,13 +16,13 @@ interface Branch {
     id?: string;
     name: string;
     address: string;
-    phone: string
+    phone: string;
 }
 
 const Branches = () => {
     const [open, setOpen] = useState<{ [key: string]: boolean }>({ right: false });
     const [branches, setBranches] = useState<Branch[]>([]);
-    const [form, setForm] = useState<Branch>({ name: '', address: '', phone: ''});
+    const [form, setForm] = useState<Branch>({ name: '', address: '', phone: '' });
     const [phoneError, setPhoneError] = useState<string>('');
     const [editingId, setEditingId] = useState<string | null>(null);
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -32,7 +32,8 @@ const Branches = () => {
     }, []);
 
     const loadBranches = async () => {
-        const snapshot = await getDocs(collection(db, 'branches'));
+        const q = query(collection(db, 'branches'), orderBy('name'));
+        const snapshot = await getDocs(q);
         const data = snapshot.docs.map(doc => ({ id: doc.id, ...(doc.data() as Branch) }));
         setBranches(data);
     };
@@ -44,7 +45,7 @@ const Branches = () => {
     const handleClose = (direction: string) => () => {
         setOpen(prev => ({ ...prev, [direction]: false }));
         setPhoneError('');
-        setForm({ name: '', address: '', phone: ''});
+        setForm({ name: '', address: '', phone: '' });
         setEditingId(null);
     };
 
@@ -53,9 +54,10 @@ const Branches = () => {
     ) => {
         const { name, value } = e.target;
         if (name === 'phone') {
-            const isValid = /^05\d{9}$/.test(value);
-            if (!isValid) {
-                setPhoneError('Telefon numarası 11 haneli ve 05 ile başlamalıdır.');
+            const isValid = !/^\d{11}$/.test(value);
+            console.log('isValid:', isValid);
+            if (value && isValid) {
+                setPhoneError('Telefon numarası 11 haneli olmalıdır.');
             } else {
                 setPhoneError('');
             }
@@ -64,8 +66,8 @@ const Branches = () => {
     };
 
     const handleSubmit = async () => {
-        if (phoneError || !/^05\d{9}$/.test(form.phone)) {
-            setPhoneError('Telefon numarası 11 haneli ve 05 ile başlamalıdır.');
+        if (phoneError || !/^\d{11}$/.test(form.phone)) {
+            setPhoneError('Telefon numarası 11 haneli olmalıdır.');
             return;
         }
 
@@ -76,7 +78,7 @@ const Branches = () => {
             await addDoc(collection(db, 'branches'), form);
         }
 
-        setForm({ name: '', address: '', phone: ''});
+        setForm({ name: '', address: '', phone: '' });
         setOpen({ right: false });
         setPhoneError('');
         setEditingId(null);
@@ -90,9 +92,10 @@ const Branches = () => {
     };
 
     const handleDelete = async (id?: string) => {
-        if (id && confirm('Bu şubeyi silmek istediğinizden emin misiniz?')) {
+        if (id) {
             await deleteDoc(doc(db, 'branches', id));
             loadBranches();
+            setOpenModal(false);
         }
     };
 
@@ -233,7 +236,7 @@ const Branches = () => {
                             </div>
                             <div className='mb-5'>
                                 <label className='text-sm font-semibold block mb-2'>Telefon *</label>
-                                <Input type="text" name="phone" value={form.phone} onChange={handleChange} placeholder='Telefon Numarası' className='w-full h-10 border border-gray-300 rounded-md px-3 outline-0' />
+                                <Input type="text" name="phone" inputMode="numeric" value={form.phone} onChange={handleChange} placeholder='Telefon (11 haneli, başında 0 ile)' className='w-full h-10 border border-gray-300 rounded-md px-3 outline-0' />
                                 {phoneError && <p className="text-red-600 text-sm mt-1">{phoneError}</p>}
                             </div>
                         </div>

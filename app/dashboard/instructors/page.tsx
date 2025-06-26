@@ -8,7 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
 import { db } from '@/app/firebaseConfig';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Image from 'next/image';
@@ -41,7 +41,8 @@ const Instructors = () => {
     }, []);
 
     const loadInstructors = async () => {
-        const snapshot = await getDocs(collection(db, 'instructors'));
+            const q = query(collection(db, 'instructors'), orderBy('name'));
+            const snapshot = await getDocs(q);
         const data = snapshot.docs.map(doc => ({ id: doc.id, ...(doc.data() as Instructor) }));
         setInstructors(data);
     };
