@@ -110,7 +110,7 @@ const Branches = () => {
             sortable: false,
             flex: 1,
             renderCell: (params) => (
-                <div className='flex gap-2 mt-2'>
+                <div className='flex gap-2'>
                     <Tooltip title="Güncelle">
                         <Button
                             variant="contained"

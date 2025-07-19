@@ -48,3 +48,9 @@ button {
 .MuiOutlinedInput-notchedOutline {
   text-indent: -99999px !important;
 }
+
+.MuiDataGrid-cell[data-field] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -97,9 +97,9 @@ const AgeGroups = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: 'name', headerName: 'Grup Adı', flex: 1 },
-    { field: 'minAge', headerName: 'Minimum Yaş', flex: 1 },
-    { field: 'maxAge', headerName: 'Maksimum Yaş', flex: 1 },
+    { field: 'name', headerName: 'Grup Adı'},
+    { field: 'minAge', headerName: 'Minimum Yaş'},
+    { field: 'maxAge', headerName: 'Maksimum Yaş' },
     { field: 'description', headerName: 'Açıklama', flex: 1 },
     {
       field: 'actions',
